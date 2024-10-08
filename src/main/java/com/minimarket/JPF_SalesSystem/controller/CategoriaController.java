@@ -40,12 +40,6 @@ public class CategoriaController {
         return "categorias/listar";
     }
 
-   /*@GetMapping("/nueva")
-    public String mostrarFormularioNuevaCategoria(Model model) {
-        model.addAttribute("categoria", new Categoria());
-        return "categorias/formulario";
-    }*/
-
     @PostMapping("/guardar")
     public String guardarCategoria(Categoria categoria) {
     	categoriaService.guardarCategoria(categoria);
