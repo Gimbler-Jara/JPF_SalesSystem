@@ -18,22 +18,37 @@ public class RolController {
 	@Autowired
 	private RolService rolService;
 
+	Boolean mostrarMensajeExito = false;
+	Boolean mostrarMensajeDeBorrado = false;
+
 	@GetMapping
 	public String listarRoles(Model model) {
+
+		if (mostrarMensajeExito) {
+			model.addAttribute("successMessage", "Rol guardado con éxito!");
+		}
+
+		if (mostrarMensajeDeBorrado) {
+			model.addAttribute("successMessage", "Rol borrado con éxito!");
+		}
+
 		model.addAttribute("roless", rolService.listarRoles());
 		model.addAttribute("roles", new Roles());
+		
+		mostrarMensajeExito = false;
+		mostrarMensajeDeBorrado = false;
 		return "roles/listar";
 	}
 
-  /*@GetMapping("/nuevo")
-	public String mostrarFormularioNuevoRol(Model model) {
-		model.addAttribute("roles", new Roles());
-		return "roles/formulario";
-	}*/
+	/*
+	 * @GetMapping("/nuevo") public String mostrarFormularioNuevoRol(Model model) {
+	 * model.addAttribute("roles", new Roles()); return "roles/formulario"; }
+	 */
 
 	@PostMapping("/guardar")
 	public String guardarRol(Roles rol) {
 		rolService.guardarRol(rol);
+		mostrarMensajeExito = true;
 		return "redirect:/roles";
 	}
 
@@ -48,6 +63,7 @@ public class RolController {
 	@GetMapping("/eliminar/{id}")
 	public String eliminarRol(@PathVariable Integer id) {
 		rolService.eliminarRol(id);
+		mostrarMensajeDeBorrado = true;
 		return "redirect:/roles";
 	}
 }

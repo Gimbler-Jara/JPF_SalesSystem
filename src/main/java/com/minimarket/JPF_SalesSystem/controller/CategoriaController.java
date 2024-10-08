@@ -17,11 +17,26 @@ public class CategoriaController {
 
     @Autowired
     private CategoriaService categoriaService;
+    
+    Boolean mostrarMensajeExito = false;
+	Boolean  mostrarMensajeDeBorrado = false;
 
     @GetMapping
     public String listarCategorias(Model model) {
+    	if(mostrarMensajeExito) {
+  		  model.addAttribute("successMessage", "Categoria guardado con éxito!");
+  		}
+  		
+  		if(mostrarMensajeDeBorrado) {
+  			model.addAttribute("successMessage", "Categoria borrado con éxito!");
+  		}
+  		
         model.addAttribute("categorias", categoriaService.listarcategorias());
         model.addAttribute("categoria", new Categoria());
+        
+        mostrarMensajeExito = false;
+		mostrarMensajeDeBorrado = false;
+		
         return "categorias/listar";
     }
 
@@ -34,6 +49,7 @@ public class CategoriaController {
     @PostMapping("/guardar")
     public String guardarCategoria(Categoria categoria) {
     	categoriaService.guardarCategoria(categoria);
+    	mostrarMensajeExito = true;
         return "redirect:/categorias";
     }
 
@@ -48,6 +64,7 @@ public class CategoriaController {
     @GetMapping("/eliminar/{id}")
     public String eliminarCategoria(@PathVariable Integer id) {
     	categoriaService.eliminarCategoria(id);
+    	mostrarMensajeDeBorrado = true;
         return "redirect:/categorias";
     }
 }

@@ -61,6 +61,7 @@ public class ProductoController {
 		} catch (MessageErrorException e) {
 			model.addAttribute("error", e.getMessage());
 			model.addAttribute("categorias", categoriaService.listarcategorias());
+			model.addAttribute("productos", productoService.listarProductos());
 			return "productos/listar";
 		}
 	}
