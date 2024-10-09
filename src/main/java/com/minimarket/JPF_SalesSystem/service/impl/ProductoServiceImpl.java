@@ -23,9 +23,13 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Override
 	public void guardarProducto(Producto producto, Boolean esVenta) {
-		
-		if (!esVenta) {
 
+		validarProducto(producto, esVenta);
+		productoRepository.save(producto);
+	}
+
+	private void validarProducto(Producto producto, Boolean esVenta) {
+		if (!esVenta) {
 			if (producto.getStockMinimo() < 0) {
 				throw new MessageErrorException("El stock mínimo no puede ser menor a 0.");
 			}
@@ -41,18 +45,20 @@ public class ProductoServiceImpl implements ProductoService {
 			if (producto.getStockMaximo() < producto.getStockMinimo()) {
 				throw new MessageErrorException("El stock máximo no puede ser menor al stock mínimo.");
 			}
-		}	
-
-		productoRepository.save(producto);
+		}
 	}
 
 	@Override
 	public Producto obtenerProductoPorId(Long id) {
-		return productoRepository.findById(id).orElse(null);
+		return productoRepository.findById(id)
+				.orElseThrow(() -> new MessageErrorException("El producto con ID " + id + " no fue encontrado."));
 	}
 
 	@Override
 	public void eliminarProducto(Long id) {
+		if (!productoRepository.existsById(id)) {
+			throw new MessageErrorException("El producto con ID " + id + " no fue encontrado.");
+		}
 		productoRepository.deleteById(id);
 	}
 

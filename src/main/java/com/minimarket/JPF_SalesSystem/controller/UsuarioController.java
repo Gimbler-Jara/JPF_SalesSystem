@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,61 +26,64 @@ public class UsuarioController {
 	@Autowired
 	private RolService rolService;
 
-	Boolean mostrarMensajeExito = false;
-	Boolean mostrarMensajeDeBorrado = false;
-
-	// Listar Usuarios
 	@GetMapping
-	public String listarUsuarios(Model model) {
-		if (mostrarMensajeExito) {
-			model.addAttribute("successMessage", "Usuario guardado con éxito!");
-		}
-
-		if (mostrarMensajeDeBorrado) {
-			model.addAttribute("successMessage", "Usuario borrado con éxito!");
-		}
-
+	public String listarUsuarios(Model model, @ModelAttribute("successMessage") String successMessage,@ModelAttribute("errorMessage") String errorMessage) {
 		model.addAttribute("usuarios", usuarioService.listarUsuarios());
 		model.addAttribute("roles", rolService.listarRoles());
 		model.addAttribute("usuario", new Usuario());
-		
-		mostrarMensajeExito = false;
-		mostrarMensajeDeBorrado = false;
-		
+
+		model.addAttribute("successMessage", successMessage);
+		model.addAttribute("errorMessage", errorMessage);
+
 		return "usuarios/lista";
 	}
 
-	// Mostrar formulario para crear un nuevo usuario
-	/*
-	 * @GetMapping("/nuevo") public String mostrarFormularioNuevoUsuario(Model
-	 * model) { List<Roles> roles = rolService.listarRoles();
-	 * model.addAttribute("usuario", new Usuario()); model.addAttribute("roles",
-	 * roles); return "usuarios/formulario"; }
-	 */
-
-	// Guardar usuario
 	@PostMapping("/guardar")
-	public String guardarUsuario(Usuario usuario, RedirectAttributes redirectAttributes) {
-		usuario.setFechaCreacion(LocalDateTime.now());
-		usuarioService.guardarUsuario(usuario);
-		mostrarMensajeExito = true;
-		return "redirect:/usuarios";
+	public String guardarUsuario(Usuario usuario, Model model, RedirectAttributes redirectAttributes) {
+		try {
+			Usuario usuarioExistentePorCorreo = usuarioService.buscarPorCorreo(usuario.getEmail());
+			if (usuarioExistentePorCorreo != null && !usuarioExistentePorCorreo.getId_usuario().equals(usuario.getId_usuario())) {
+				model.addAttribute("errorMessage", "Correo ya registrado!!");
+				model.addAttribute("user", usuario);
+				model.addAttribute("usuarios", usuarioService.listarUsuarios());
+				model.addAttribute("roles", rolService.listarRoles());
+				return "usuarios/lista";
+			}
+
+			usuario.setFechaCreacion(LocalDateTime.now());
+			usuarioService.guardarUsuario(usuario);
+			redirectAttributes.addFlashAttribute("successMessage", "Usuario guardado con éxito!");
+			return "redirect:/usuarios";
+		} catch (Exception e) {
+			model.addAttribute("usuario", usuario);
+			model.addAttribute("usuarios", usuarioService.listarUsuarios());
+			model.addAttribute("roles", rolService.listarRoles());
+			model.addAttribute("errorMessage", "Error al guardar el usuario: " + e.getMessage());
+			return "usuarios/lista";
+		}
 	}
 
-	// Mostrar formulario para editar un usuario
 	@GetMapping("/editar/{id}")
-	public String mostrarFormularioEdicion(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
-		model.addAttribute("usuario", usuarioService.buscarUsuarioPorId(id));
-		model.addAttribute("roles", rolService.listarRoles());
+	public String mostrarFormularioEdicion(@PathVariable Long id, Model model) {
+		Usuario usuario = usuarioService.buscarUsuarioPorId(id);
+		if (usuario != null) {
+			model.addAttribute("usuario", usuario);
+		} else {
+			model.addAttribute("errorMessage", "Usuario no encontrado");
+		}
 		model.addAttribute("usuarios", usuarioService.listarUsuarios());
+		model.addAttribute("roles", rolService.listarRoles());
 		return "usuarios/lista";
 	}
 
-	// Eliminar usuario
 	@GetMapping("/eliminar/{id}")
 	public String eliminarUsuario(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-		usuarioService.eliminarUsuario(id);
-		mostrarMensajeDeBorrado = true;
+		try {
+			usuarioService.eliminarUsuario(id);
+			redirectAttributes.addFlashAttribute("successMessage", "Usuario eliminado con éxito!");
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar el usuario: " + e.getMessage());
+		}
 		return "redirect:/usuarios";
 	}
 }

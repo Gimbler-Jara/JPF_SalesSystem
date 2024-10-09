@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,67 +19,59 @@ import com.minimarket.JPF_SalesSystem.utility.MessageErrorException;
 @RequestMapping("/productos")
 public class ProductoController {
 
-	@Autowired
-	private ProductoService productoService;
+    @Autowired
+    private ProductoService productoService;
 
-	@Autowired
-	private CategoriaService categoriaService;
-	
-	Boolean mostrarMensajeExito = false;
-	Boolean  mostrarMensajeDeBorrado = false;
+    @Autowired
+    private CategoriaService categoriaService;
 
-	@GetMapping
-	public String listarProductos(Model model) {
-		if(mostrarMensajeExito) {
-		  model.addAttribute("successMessage", "Producto guardado con éxito!");
-		}
-		
-		if(mostrarMensajeDeBorrado) {
-			model.addAttribute("successMessage", "Producto borrado con éxito!");
-		}
-		model.addAttribute("productos", productoService.listarProductos());
-		model.addAttribute("categorias", categoriaService.listarcategorias());
-		model.addAttribute("producto", new Producto());
-		mostrarMensajeExito = false;
-		mostrarMensajeDeBorrado = false;
-		
-		return "productos/listar";
-	}
+    @GetMapping
+    public String listarProductos(Model model, @ModelAttribute("successMessage") String successMessage, @ModelAttribute("errorMessage") String errorMessage) {
+        model.addAttribute("productos", productoService.listarProductos());
+        model.addAttribute("categorias", categoriaService.listarcategorias());
+        model.addAttribute("producto", new Producto());
+        model.addAttribute("successMessage", successMessage);
+        model.addAttribute("errorMessage", errorMessage);
+        return "productos/listar";
+    }
 
-	/*@GetMapping("/nuevo")
-	public String mostrarFormularioNuevoProducto(Model model) {
-		model.addAttribute("producto", new Producto());
-		model.addAttribute("categorias", categoriaService.listarcategorias());
-		return "productos/formulario";
-	}*/
+    @PostMapping("/guardar")
+    public String guardarProducto(Producto producto,Model model, RedirectAttributes redirectAttributes) {
+        try {
+            productoService.guardarProducto(producto, false);
+            redirectAttributes.addFlashAttribute("successMessage", "Producto guardado con éxito!");
+            return "redirect:/productos";
+        } catch (MessageErrorException e) {
+        	model.addAttribute("producto", producto); 
+            model.addAttribute("categorias", categoriaService.listarcategorias());
+            model.addAttribute("productos", productoService.listarProductos());
+            model.addAttribute("errorMessage", e.getMessage()); 
+            return "productos/listar";
+        }
+    }
 
-	@PostMapping("/guardar")
-	public String guardarProducto(Producto producto,RedirectAttributes redirectAttributes, Model model) {
-		try {
-			productoService.guardarProducto(producto, false);
-			mostrarMensajeExito = true;
-			return "redirect:/productos";
-		} catch (MessageErrorException e) {
-			model.addAttribute("error", e.getMessage());
-			model.addAttribute("categorias", categoriaService.listarcategorias());
-			model.addAttribute("productos", productoService.listarProductos());
-			return "productos/listar";
-		}
-	}
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioEditarProducto(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            model.addAttribute("producto", productoService.obtenerProductoPorId(id));
+            model.addAttribute("categorias", categoriaService.listarcategorias());
+            model.addAttribute("productos", productoService.listarProductos());
+            return "productos/listar";
+        } catch (MessageErrorException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/productos";
+        }
+    }
 
-	@GetMapping("/editar/{id}")
-	public String mostrarFormularioEditarProducto(@PathVariable Long id, Model model) {
-		Producto producto = productoService.obtenerProductoPorId(id);
-		model.addAttribute("producto", producto);
-		model.addAttribute("categorias", categoriaService.listarcategorias());
-		model.addAttribute("productos", productoService.listarProductos());
-		return "productos/listar";
-	}
-
-	@GetMapping("/eliminar/{id}")
-	public String eliminarProducto(@PathVariable Long id) {
-		productoService.eliminarProducto(id);
-		mostrarMensajeDeBorrado = true;
-		return "redirect:/productos";
-	}
+    @GetMapping("/eliminar/{id}")
+    public String eliminarProducto(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            productoService.eliminarProducto(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Producto borrado con éxito!");
+        } catch (MessageErrorException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/productos";
+    }
 }
+
