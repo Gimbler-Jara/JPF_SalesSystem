@@ -11,8 +11,10 @@
 <link rel="stylesheet" type="text/css" href="/css/ventas.css">
 <link rel="stylesheet" type="text/css" href="/css/modal.css">
 <script type="text/javascript" src="/js/ventas.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="/js/alert.js"></script>
 </head>
-<body>
+<body th:data-success-message="${successMessage ?: ''}" th:data-error-message="${errorMessage ?: ''}">
 
 	<div class="contenedor-general">
 		<div class="menu">

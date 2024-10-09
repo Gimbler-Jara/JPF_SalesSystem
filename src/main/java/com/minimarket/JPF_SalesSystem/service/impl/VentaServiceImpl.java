@@ -50,9 +50,7 @@ public class VentaServiceImpl implements VentaService {
         venta.setFecha(LocalDateTime.now());
 
         // Calcular el total de la venta
-        BigDecimal totalVentas = productos.stream()
-            .map(vp -> BigDecimal.valueOf(vp.getTotalProducto()))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalVentas = productos.stream().map(vp -> BigDecimal.valueOf(vp.getTotalProducto())).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         totalVentas = totalVentas.setScale(2, RoundingMode.HALF_UP);
         venta.setTotalVenta(totalVentas.doubleValue());

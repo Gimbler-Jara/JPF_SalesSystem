@@ -1,6 +1,5 @@
 package com.minimarket.JPF_SalesSystem.controller;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.minimarket.JPF_SalesSystem.model.ProductoVentaLocal;
 import com.minimarket.JPF_SalesSystem.model.Usuario;
@@ -40,8 +40,9 @@ public class VentaController {
 	List<VentaProducto> listaVentaProductos = new ArrayList<VentaProducto>();
 
 	@GetMapping
-	public String mostrarFormularioCrear(Model model) {
-		List<ProductoVentaLocal> productosVentaLocal = ventaProductoService.generarListaProductosVenta(listaVentaProductos);
+	public String mostrarFormularioCrear(Model model, @ModelAttribute("errorMessage") String errorMessage) {
+		List<ProductoVentaLocal> productosVentaLocal = ventaProductoService
+				.generarListaProductosVenta(listaVentaProductos);
 		List<Usuario> clientes = usuarioService.listarClientes();
 
 		model.addAttribute("productos", productoService.listarProductos());
@@ -50,22 +51,30 @@ public class VentaController {
 		model.addAttribute("listaVentaProductos", productosVentaLocal);
 		model.addAttribute("ventas", ventaService.listarVentas());
 
+		model.addAttribute("errorMessage", errorMessage);
+
 		return "ventas/formulario";
 	}
 
 	@PostMapping("/agregarProducto")
-	public String agregarProducto(@ModelAttribute VentaProducto ventaProducto) {
-		ventaProductoService.agregarProductoAVenta(ventaProducto, listaVentaProductos);
-		return "redirect:/ventas";
+	public String agregarProducto(@ModelAttribute VentaProducto ventaProducto, RedirectAttributes redirectAttributes) {
+		try {
+			ventaProductoService.agregarProductoAVenta(ventaProducto, listaVentaProductos);
+			return "redirect:/ventas";
+		} catch (IllegalArgumentException e) {
+			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+			return "redirect:/ventas";
+		}
+		
 	}
 
 	@PostMapping("/guardarVenta")
 	public String guardarVenta(@RequestParam("idUsuario") Long idUsuario) {
 		Usuario usuario = usuarioService.buscarUsuarioPorId(idUsuario);
-	    ventaService.guardarVentaConProductos(usuario, listaVentaProductos);
-	    listaVentaProductos.clear();
+		ventaService.guardarVentaConProductos(usuario, listaVentaProductos);
+		listaVentaProductos.clear();
 
-	    return "redirect:/ventas";
+		return "redirect:/ventas";
 	}
 
 	@PostMapping("/eliminarProducto")
@@ -87,11 +96,10 @@ public class VentaController {
 
 		return "ventas/formulario";
 	}
-	
+
 	@PostMapping("/cerrarModal")
 	public String cerrarModal(Model model) {
-	    model.addAttribute("mostrarModal", false); 
+		model.addAttribute("mostrarModal", false);
 		return "redirect:/ventas";
 	}
 }
-

@@ -16,7 +16,7 @@ import com.minimarket.JPF_SalesSystem.service.CategoriaService;
 @Controller
 @RequestMapping("/categorias")
 public class CategoriaController {
-
+ 
     @Autowired
     private CategoriaService categoriaService;
     

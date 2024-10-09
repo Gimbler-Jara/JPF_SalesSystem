@@ -83,6 +83,21 @@ public class VentaProductoServiceImpl implements VentaProductoService{
 		BigDecimal cantidad = BigDecimal.valueOf(ventaProducto.getCantidad());
 		BigDecimal totalProducto = precioUnitario.multiply(cantidad).setScale(2, RoundingMode.HALF_UP);
 		ventaProducto.setTotalProducto(totalProducto.doubleValue());
+		
+		// Verificar la cantidad total a vender
+	    int cantidadTotal = ventaProducto.getCantidad();
+	    for (VentaProducto vp : listaVentaProductos) {
+	        if (vp.getProducto().getId_producto().equals(ventaProducto.getProducto().getId_producto())) {
+	            cantidadTotal += vp.getCantidad(); // Sumar la cantidad ya existente en la lista
+	        }
+	    }
+		
+		// Verificar si la cantidad a vender no excede el stock
+	    int stockActual = producto.getStockActual();
+	    if (cantidadTotal > stockActual) {
+	    	int cantidadDisponible = stockActual - cantidadTotal + ventaProducto.getCantidad();
+	        throw new IllegalArgumentException("Cantidad Disponible: " + cantidadDisponible);
+	    }
 
 		// Verificar si el producto ya está en la lista y actualizar la cantidad
 		boolean productoExistente = false;
