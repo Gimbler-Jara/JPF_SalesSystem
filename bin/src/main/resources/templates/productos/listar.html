@@ -7,8 +7,9 @@
 <link rel="stylesheet" type="text/css" href="/css/producto.css">
 <script src="https://kit.fontawesome.com/3d156103f9.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="/js/alert.js"></script>
 </head>
-<body>
+<body th:data-success-message="${successMessage ?: ''}" th:data-error-message="${errorMessage ?: ''}">
 
 	<div class="contenedor-general">
 		<div class="menu">  
@@ -140,30 +141,5 @@
 				</div>
 			</div>
 	</div>
-	
-	<script th:inline="javascript">
-   		 var successMessage = /*[[${successMessage}]]*/ null;
-    	var errorMessage = /*[[${error}]]*/ null;
-
-  		  if (successMessage !== null) {
-    		    Swal.fire({
-         	    title: 'Éxito',
-     	        text: successMessage,
-           	    showConfirmButton: false,
-                icon: 'success',
-                timer: 2000
-               });
-          } else if (errorMessage !== null) {
-               Swal.fire({
-               title: 'Error',
-               text: errorMessage,
-               showConfirmButton: false,
-               icon: 'error',
-              timer: 2000
-          });
-         }
-    </script>
-
-
 </body>
 </html>

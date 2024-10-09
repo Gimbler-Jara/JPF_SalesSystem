@@ -8,8 +8,10 @@
 <link rel="stylesheet" type="text/css" href="/css/menu.css">
 <link rel="stylesheet" type="text/css" href="/css/producto.css">
 <script src="https://kit.fontawesome.com/3d156103f9.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="/js/alert.js"></script>
 </head>
-<body>
+<body th:data-success-message="${successMessage ?: ''}" th:data-error-message="${errorMessage ?: ''}">
 
 	<div class="contenedor-general">
 		<div class="menu">
