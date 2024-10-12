@@ -14,4 +14,6 @@ public interface RolService {
 
 	public void eliminarRol(Integer id);
 
+	public boolean existeRol(String roleName);
+
 }
