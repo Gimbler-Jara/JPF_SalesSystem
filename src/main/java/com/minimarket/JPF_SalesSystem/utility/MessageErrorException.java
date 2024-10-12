@@ -9,6 +9,4 @@ public class MessageErrorException extends RuntimeException {
 	public MessageErrorException(String mensaje) {
 		super(mensaje);
 	}
-	
-	/// este es un mesaje de prueba
 }
