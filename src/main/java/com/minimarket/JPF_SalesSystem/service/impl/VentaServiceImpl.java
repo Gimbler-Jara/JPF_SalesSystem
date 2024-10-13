@@ -46,6 +46,7 @@ public class VentaServiceImpl implements VentaService {
 
 	@Override
 	public Venta guardarVentaConProductos(Usuario usuario, List<VentaProducto> productos) {
+		
 		Venta venta = new Venta();
         venta.setFecha(LocalDateTime.now());
 

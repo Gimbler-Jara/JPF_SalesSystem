@@ -34,4 +34,14 @@ public class RolServiceImpl implements RolService{
     public void eliminarRol(Integer id) {
         rolRepository.deleteById(id);
     }
+    @Override
+    public boolean existeRol(String roleName) {
+        List<Roles> roles = listarRoles();
+        for (Roles rol : roles) {
+            if (rol.getRol().equals(roleName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
