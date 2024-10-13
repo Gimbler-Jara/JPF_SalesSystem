@@ -8,4 +8,5 @@ import com.minimarket.JPF_SalesSystem.model.Roles;
 @Repository
 public interface RolesRepository extends JpaRepository<Roles, Integer>{
 
+	
 }

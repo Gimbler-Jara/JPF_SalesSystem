@@ -1,5 +1,6 @@
 package com.minimarket.JPF_SalesSystem.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,13 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Override
 	public List<Producto> listarProductos() {
-		return productoRepository.findAll();
+		List<Producto> productos = new ArrayList<Producto>(); 
+		for (Producto producto : productoRepository.findAll()) {
+			if (producto.getStockActual()>0) {
+				productos.add(producto);
+			}
+		}
+		return productos;
 	}
 
 	@Override

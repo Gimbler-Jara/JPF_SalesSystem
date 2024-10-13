@@ -43,12 +43,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public List<Usuario> listarClientes() {
 		List<Usuario> usuarios = usuarioRepository.findAll();
-        List<Usuario> clientes = new ArrayList<>();
-        for (Usuario usuario : usuarios) {
-            if ("Cliente".equals(usuario.getRol().getRol())) {
-                clientes.add(usuario);
-            }
-        }
-        return clientes;
+		List<Usuario> clientes = new ArrayList<>();
+		for (Usuario usuario : usuarios) {
+			if (usuario.getEstado() == true) {
+				if ("Cliente".equals(usuario.getRol().getRol())) {
+					clientes.add(usuario);
+				}
+			}
+		}
+		return clientes;
 	}
 }
