@@ -3,9 +3,16 @@ package com.minimarket.JPF_SalesSystem.model;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "tb_usuarios")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@Builder
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +42,7 @@ public class Usuario {
     @JoinColumn(name = "id_rol", nullable = false)
     private Roles rol;
 
-    public Usuario() {
+  /*  public Usuario() {
 		super();
 	}
 
@@ -136,7 +143,7 @@ public class Usuario {
 
 	public void setRol(Roles rol) {
 		this.rol = rol;
-	}
+	}*/
     	
 }
 
