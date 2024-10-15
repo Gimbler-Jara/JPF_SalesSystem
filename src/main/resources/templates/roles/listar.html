@@ -43,12 +43,13 @@
 						<form th:action="@{/roles/guardar}" th:object="${roles}" method="post">
 							<input type="hidden" th:field="${roles.idRol}" />
 
-							<div class="form-group row mt-5">
-								<label class="col-form-label col-sm-4">Nombre del Rol:</label>
-								<div class="col-sm-8 input-group-sm">
-									<input type="text" th:field="*{rol}" class="form-control" required>
-								</div>
-							</div>
+	<div class="form-group mt-5">
+    <label class="col-form-label" style="display: block; text-align: left;">Nombre del Rol:</label>
+    <div class="input-group-sm">
+        <input type="text" th:field="*{rol}" class="form-control" required>
+    </div>
+</div>
+	
 
 							<div class="text-center mt-3 ">
 								<button type="submit" class="btns">Guardar</button>
