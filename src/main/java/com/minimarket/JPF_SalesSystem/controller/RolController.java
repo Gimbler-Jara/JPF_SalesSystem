@@ -38,38 +38,16 @@ public class RolController {
 
 	@PostMapping("/guardar")
 	public String guardarRol(Roles rol, Model model, RedirectAttributes redirectAttributes) {
-	    String roleName = rol.getRol();
-	    if (roleName.length() < 3 || roleName.length() > 10) {
-	        model.addAttribute("roles", rol);
-	        model.addAttribute("roless", rolService.listarRoles());
-	        model.addAttribute("errorMessage", "El nombre del rol debe tener entre 3 y 10 caracteres.");
-	        return "roles/listar";
-	    }
-
-	    if (!roleName.equals(roleName.toUpperCase()) && !roleName.equals(roleName.toLowerCase())) {
-	        model.addAttribute("roles", rol);
-	        model.addAttribute("roless", rolService.listarRoles());
-	        model.addAttribute("errorMessage", "El nombre del rol debe ser toda mayúscula o toda minúscula");
-	        return "roles/listar";
-	    }
-
-	    if (rolService.existeRol(roleName)) {
-	        model.addAttribute("roles", rol);
-	        model.addAttribute("roless", rolService.listarRoles());
-	        model.addAttribute("errorMessage", "Ya existe un rol con este nombre.");
-	        return "roles/listar";
-	    }
-
-	    try {
-	        rolService.guardarRol(rol);
-	        redirectAttributes.addFlashAttribute("successMessage", "Rol guardado con éxito!");
-	        return "redirect:/roles";
-	    } catch (Exception e) {
-	        model.addAttribute("roles", rol);
-	        model.addAttribute("roless", rolService.listarRoles());
-	        model.addAttribute("errorMessage", "Error al guardar el rol: " + e.getMessage());
-	        return "roles/listar";
-	    }
+		try {
+			rolService.guardarRol(rol);
+			redirectAttributes.addFlashAttribute("successMessage", "Rol guardado con éxito!");
+			return "redirect:/roles";
+		} catch (Exception e) {
+			model.addAttribute("roles", rol);
+			model.addAttribute("roless", rolService.listarRoles());
+			model.addAttribute("errorMessage", "Error al guardar el rol: " + e.getMessage());
+			return "roles/listar";
+		}
 	}
 
 	@GetMapping("/editar/{id}")

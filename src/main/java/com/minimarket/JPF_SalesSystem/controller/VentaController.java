@@ -41,8 +41,7 @@ public class VentaController {
 
 	@GetMapping
 	public String mostrarFormularioCrear(Model model, @ModelAttribute("errorMessage") String errorMessage) {
-		List<ProductoVentaLocal> productosVentaLocal = ventaProductoService
-				.generarListaProductosVenta(listaVentaProductos);
+		List<ProductoVentaLocal> productosVentaLocal = ventaProductoService.generarListaProductosVenta(listaVentaProductos);
 		List<Usuario> clientes = usuarioService.listarClientes();
 
 		model.addAttribute("productos", productoService.listarProductos());
