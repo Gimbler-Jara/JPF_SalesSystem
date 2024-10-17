@@ -35,12 +35,19 @@ th {
 }
 
 .btns {
-	padding: 6px;
-	background-color: black;
-	width: 300px;
-	color: white;
-	text-decoration: none;
-	transition: all 300ms;
+    padding: 6px;
+    background-color: black;
+    width: 100%; /* Ancho completo en pantallas pequeñas */
+    max-width: 300px; /* Limita el ancho máximo */
+    color: white;
+    text-decoration: none;
+    transition: all 300ms;
+}
+
+@media (min-width: 768px) {
+    .btns {
+        width: 50%; /* Ancho al 50% en pantallas medianas y más grandes */
+    }
 }
 
 .btns:hover {
