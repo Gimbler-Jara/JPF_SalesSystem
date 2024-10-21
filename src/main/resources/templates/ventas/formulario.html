@@ -43,19 +43,25 @@
 
 					<div class="formulario-venta">
 						<form th:action="@{/ventas/agregarProducto}" th:object="${ventaProducto}" method="post">
-							<div class="mb-3">
-								<label class="form-label">Producto:</label>
-								<div class="input-group">
-									<select th:field="*{producto.id_producto}" class="form-control" required="required">
+							<div class="mb-3 producto">
+								<div>
+								    <label class="form-label">Producto:</label>
+								    <div class="input-group">
+									  <select th:field="*{producto.id_producto}" class="form-control" id="productoSelect" required="required">
 										<option value="" selected>Seleccione un producto</option>
 										<option th:each="producto : ${productos}" th:value="${producto.id_producto}" th:text="${producto.nombre}"></option>
-									</select>
+									  </select>
+								    </div>
+								</div>
+								<div>
+								    <label class="form-label">Stock disponible:</label> 
+								    <input type="number" class="form-control" id="stockDisponible" required="required"  readonly="readonly"/> 
 								</div>
 							</div>
 
 							<div class="mb-3">
 								<label class="form-label">Cantidad:</label> 
-								<input type="number"th:field="*{cantidad}" class="form-control" required="required"/>
+								<input type="number"th:field="*{cantidad}" class="form-control"/>
 							</div>
 
 							<div class="text-center">

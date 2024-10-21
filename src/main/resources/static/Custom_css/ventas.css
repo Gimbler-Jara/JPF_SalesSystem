@@ -31,7 +31,12 @@
 
 .formulario-venta {
 	width: 80%;
-	margin: 0 auto;
+	margin: 20px auto;
+}
+
+.producto{
+	display: flex;
+	justify-content: space-between;
 }
 
 .lista-venta {
