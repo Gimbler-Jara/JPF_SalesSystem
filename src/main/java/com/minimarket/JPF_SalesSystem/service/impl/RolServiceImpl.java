@@ -22,13 +22,19 @@ public class RolServiceImpl implements RolService {
 
 	@Override
 	public void guardarRol(Roles rol) {
+
+		if (rol.getRol().isEmpty()) {
+			throw new IllegalArgumentException("El campo del rol no puede estar vacio");
+		} 
 		
 		if (rol.getRol().length() < 3 || rol.getRol().length() > 15) {
 			throw new IllegalArgumentException("El nombre del rol debe tener entre 3 y 10 caracteres.");
-		} else if (existeRol(rol.getRol())) {
-			throw new IllegalArgumentException("Ya existe un rol con este nombre.");
 		} 
 		
+		if (existeRol(rol.getRol()) && rol.getIdRol() == null) {
+			throw new IllegalArgumentException("Ya existe un rol con este nombre.");
+		}
+
 		String r = rol.getRol().toUpperCase();
 		rol.setRol(r);
 

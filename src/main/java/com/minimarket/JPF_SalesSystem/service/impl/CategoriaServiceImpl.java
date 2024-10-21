@@ -22,6 +22,10 @@ public class CategoriaServiceImpl implements CategoriaService{
 	 
 	 @Override
 	 public void guardarCategoria(Categoria categoria) {
+		 if(categoria.getNombreCategoria().isEmpty()) {
+			 throw new IllegalArgumentException("El Campo no puede estar vacio");
+		 }
+		 
 		 categoriaRepository.save(categoria);
 	 }
 	 

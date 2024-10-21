@@ -44,7 +44,7 @@ public class VentaController {
 		List<ProductoVentaLocal> productosVentaLocal = ventaProductoService.generarListaProductosVenta(listaVentaProductos);
 		List<Usuario> clientes = usuarioService.listarClientes();
 
-		model.addAttribute("productos", productoService.listarProductos());
+		model.addAttribute("productos", productoService.listarProductosVenta());
 		model.addAttribute("usuarios", clientes);
 		model.addAttribute("ventaProducto", new VentaProducto());
 		model.addAttribute("listaVentaProductos", productosVentaLocal);

@@ -45,7 +45,7 @@ public class RolController {
 		} catch (Exception e) {
 			model.addAttribute("roles", rol);
 			model.addAttribute("roless", rolService.listarRoles());
-			model.addAttribute("errorMessage", "Error al guardar el rol: " + e.getMessage());
+			model.addAttribute("errorMessage", e.getMessage());
 			return "roles/listar";
 		}
 	}

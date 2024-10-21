@@ -58,7 +58,7 @@ public class UsuarioController {
 			model.addAttribute("usuario", usuario);
 			model.addAttribute("usuarios", usuarioService.listarUsuarios());
 			model.addAttribute("roles", rolService.listarRoles());
-			model.addAttribute("errorMessage", "Error al guardar el usuario: " + e.getMessage());
+			model.addAttribute("errorMessage", e.getMessage());
 			return "usuarios/lista";
 		}
 	}
