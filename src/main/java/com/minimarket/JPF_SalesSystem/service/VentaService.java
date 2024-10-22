@@ -16,6 +16,6 @@ public interface VentaService {
 
 	public void eliminarVenta(Integer id);
 	
-	Venta guardarVentaConProductos(Usuario usuario, List<VentaProducto> productos);
+	Venta guardarVentaConProductos(Usuario usuario, List<VentaProducto> productos, String cliente);
 
 }

@@ -100,7 +100,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 		List<Usuario> clientes = new ArrayList<>();
 		for (Usuario usuario : usuarios) {
 			if (usuario.getEstado() == true) {
-				if ("CLIENTE".equals(usuario.getRol().getRol())) {
+				if ("VENDEDOR".equals(usuario.getRol().getRol())) {
 					clientes.add(usuario);
 				}
 			}

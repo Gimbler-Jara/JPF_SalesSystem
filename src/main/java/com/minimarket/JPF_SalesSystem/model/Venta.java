@@ -26,6 +26,9 @@ public class Venta {
 
 	@Column(nullable = false)
 	private Double totalVenta;
+	
+	@Column(name = "Datos_cliente")
+	private String cliente;
 
 	@ManyToOne
 	@JoinColumn(name = "id_usuario", nullable = false)

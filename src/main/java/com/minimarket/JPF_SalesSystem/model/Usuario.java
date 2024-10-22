@@ -27,15 +27,10 @@ public class Usuario {
     @Column(nullable = false)
     private String password; 
     
-    @Column(name = "estado", nullable = false)
+    @Column(name = "estado")
     private Boolean estado; 
     
     private LocalDateTime fechaCreacion;
-    
-    private LocalDateTime ultimoAcceso;
-
-    @Column(name = "intentos_fallidos", nullable = false)
-    private Integer intentosFallidos = 0;
 
     // Relación ManyToOne con Roles
     @ManyToOne

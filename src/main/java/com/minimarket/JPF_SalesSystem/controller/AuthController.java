@@ -15,27 +15,37 @@ import lombok.RequiredArgsConstructor;;
 @Controller
 @RequiredArgsConstructor
 public class AuthController {
-     
+
 	private final UsuarioService usuarioService;
-	
+
 	@GetMapping("/")
 	public String mostrarLogin(Model model) {
 		model.addAttribute("usuario", new Usuario());
 		return "login";
 	}
-	
+
 	@PostMapping("/login")
 	public String login(@ModelAttribute("usuario") Usuario usuarioFormulario, Model model, HttpSession session) {
 		boolean validarUsuario = usuarioService.validarUsuario(usuarioFormulario);
+
 		if (validarUsuario) {
+
+			for (Usuario usuario : usuarioService.listarUsuarios()) {
+
+				if (usuario.getEmail().equals(usuarioFormulario.getEmail())) {
+					session.setAttribute("rol", usuario.getRol().getRol());
+					session.setAttribute("usuarioId", usuario.getId_usuario());
+				}
+			}
+
 			session.setAttribute("usuario", usuarioFormulario.getEmail());
 			return "redirect:/ventas";
 		}
 		model.addAttribute("loginInvalido", "No existe el usuario");
 		model.addAttribute("usuario", new Usuario());
 		return "login";
-	} 
-	
+	}
+
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();

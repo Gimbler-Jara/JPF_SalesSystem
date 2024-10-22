@@ -43,9 +43,13 @@
 					<div class="text-center mb-5">
 						<h1>Registro de Venta</h1>
 					</div>
-
-
+					
 					<div class="formulario-venta">
+					    <div class="mb-4">
+						    <label class="form-label">Datos del Vendedor</label> 
+						    <input type="text" class="form-control" th:value="${vendedor}" required="required"  readonly="readonly"/> 
+				        </div>
+					
 						<form th:action="@{/ventas/agregarProducto}" th:object="${ventaProducto}" method="post">
 							<div class="mb-3 producto">
 								<div>
@@ -53,7 +57,7 @@
 								    <div class="input-group">
 									  <select th:field="*{producto.id_producto}" class="form-control" id="productoSelect" required="required">
 										<option value="" selected>Seleccione un producto</option>
-										<option th:each="producto : ${productos}" th:value="${producto.id_producto}" th:text="${producto.nombre}"></option>
+										<option th:each="producto : ${productos}" th:value="${producto.id_producto}" th:text="${producto.nombre}" th:attr="data-stock=${producto.stockActual}"></option>
 									  </select>
 								    </div>
 								</div>
@@ -115,12 +119,11 @@
 					
 					<div class="formulario-venta mt-5">
 					     <form th:action="@{/ventas/guardarVenta}" th:object="${venta}"method="post">
-							<div class="mb-3">
-								<label class="form-label">Datos del cliente:</label> 
-								<select name="idUsuario" class="form-control" id="clienteSelect" required="required">
-									<option value="" selected>Seleccione un cliente</option>
-									<option th:each="usuario : ${usuarios}" th:value="${usuario.getId_usuario()}" th:text="${usuario.username}"></option>
-								</select>
+							<div class="mb-3">								
+								<div class="mb-3">
+								   <label class="form-label">Ingresa los datos del cliente:</label> 
+								   <input type="text" name="cliente" class="form-control" th:field="*{cliente}"/> 
+							   </div>
 							</div>
 
 							<div class="text-center">
@@ -139,6 +142,7 @@
 						<table class="table table-bordered text-center table-sm">
 							<thead>
 								<tr>
+									<th style="background-color: black;color: white;">Vendedor</th>
 									<th style="background-color: black;color: white;">Cliente</th>
 									<th style="background-color: black;color: white;">Total Venta</th>
 									<th style="background-color: black;color: white;">Fecha</th>
@@ -148,6 +152,7 @@
 							<tbody>
 								<tr th:each="venta : ${ventas}">
 									<td th:text="${venta.usuario.username}"></td>
+									<td th:text="${venta.cliente}"></td>
 									<td th:text="${venta.totalVenta}"></td>
 									<td
 										th:text="${#temporals.format(venta.fecha, 'dd/MM/yyyy HH:mm')}"></td>

@@ -45,7 +45,7 @@ public class VentaServiceImpl implements VentaService {
 	}
 
 	@Override
-	public Venta guardarVentaConProductos(Usuario usuario, List<VentaProducto> productos) {
+	public Venta guardarVentaConProductos(Usuario usuario, List<VentaProducto> productos, String cliente) {
 		
 		Venta venta = new Venta();
         venta.setFecha(LocalDateTime.now());
@@ -58,6 +58,7 @@ public class VentaServiceImpl implements VentaService {
 
         // Asociar la venta al usuario
         venta.setUsuario(usuario);
+        venta.setCliente(cliente);
 
         // Guardar la venta
         Venta ventaGuardada = ventaRepository.save(venta);

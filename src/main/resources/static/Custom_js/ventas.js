@@ -5,17 +5,24 @@ document.addEventListener('DOMContentLoaded', function() {
 	function validateForm() {
 		const productosSeleccionados = productosTable.querySelectorAll('tbody tr').length > 0;
 
-		if (productosSeleccionados) {
-			registrarVentaButton.disabled = false;
-		} else {
-			registrarVentaButton.disabled = true;
-		}
+		registrarVentaButton.disabled = !productosSeleccionados;
 	}
 
-	clienteSelect.addEventListener('change', validateForm);
+	productosTable.addEventListener('DOMNodeInserted', validateForm);
+	productosTable.addEventListener('DOMNodeRemoved', validateForm);
 
 	// Valida si hay productos seleccionados en la tabla al cargar la página
 	validateForm();
+
+	//Actualizamos el sctockActual de forma dianamica
+	const productoSelect = document.getElementById('productoSelect');
+	const stockDisponibleInput = document.getElementById('stockDisponible');
+
+	productoSelect.addEventListener('change', function() {
+		const selectedOption = productoSelect.options[productoSelect.selectedIndex];
+		const stockDisponible = selectedOption.getAttribute('data-stock'); 
+		stockDisponibleInput.value = stockDisponible ? stockDisponible : ''; 
+	});
 });
 
 

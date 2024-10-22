@@ -15,11 +15,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.minimarket.JPF_SalesSystem.model.ProductoVentaLocal;
 import com.minimarket.JPF_SalesSystem.model.Usuario;
+import com.minimarket.JPF_SalesSystem.model.Venta;
 import com.minimarket.JPF_SalesSystem.model.VentaProducto;
 import com.minimarket.JPF_SalesSystem.service.ProductoService;
 import com.minimarket.JPF_SalesSystem.service.UsuarioService;
 import com.minimarket.JPF_SalesSystem.service.VentaService;
 import com.minimarket.JPF_SalesSystem.service.impl.VentaProductoServiceImpl;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/ventas")
@@ -40,16 +43,18 @@ public class VentaController {
 	List<VentaProducto> listaVentaProductos = new ArrayList<VentaProducto>();
 
 	@GetMapping
-	public String mostrarFormularioCrear(Model model, @ModelAttribute("errorMessage") String errorMessage) {
-		
+	public String mostrarFormularioCrear(Model model, @ModelAttribute("errorMessage") String errorMessage, HttpSession session) {
+		Long usuarioId = (Long) session.getAttribute("usuarioId");
+		Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
 		List<ProductoVentaLocal> productosVentaLocal = ventaProductoService.generarListaProductosVenta(listaVentaProductos);
 		List<Usuario> clientes = usuarioService.listarClientes();
 
 		model.addAttribute("productos", productoService.listarProductosVenta());
-		model.addAttribute("usuarios", clientes);
+		model.addAttribute("vendedor", usuario.getUsername());
 		model.addAttribute("ventaProducto", new VentaProducto());
 		model.addAttribute("listaVentaProductos", productosVentaLocal);
 		model.addAttribute("ventas", ventaService.listarVentas());
+		model.addAttribute("venta", new Venta());
 
 		model.addAttribute("errorMessage", errorMessage);
 
@@ -70,9 +75,10 @@ public class VentaController {
 	}
 
 	@PostMapping("/guardarVenta")
-	public String guardarVenta(@RequestParam("idUsuario") Long idUsuario) {
-		Usuario usuario = usuarioService.buscarUsuarioPorId(idUsuario);
-		ventaService.guardarVentaConProductos(usuario, listaVentaProductos);
+	public String guardarVenta(@RequestParam("cliente") String cliente, HttpSession session, Model model) {
+		Long usuarioId = (Long) session.getAttribute("usuarioId");
+		Usuario usuario = usuarioService.buscarUsuarioPorId(usuarioId);
+		ventaService.guardarVentaConProductos(usuario, listaVentaProductos, cliente);
 		listaVentaProductos.clear();
 
 		return "redirect:/ventas";
