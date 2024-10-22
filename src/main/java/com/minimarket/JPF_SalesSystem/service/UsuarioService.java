@@ -17,4 +17,6 @@ public interface UsuarioService {
 	public Usuario buscarPorCorreo(String correo);
 	
 	public List<Usuario> listarClientes();
+	
+	public void login(String email, String password);
 }

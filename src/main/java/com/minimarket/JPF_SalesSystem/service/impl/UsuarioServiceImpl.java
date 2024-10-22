@@ -84,4 +84,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 		}
 		return clientes;
 	}
+	
+	@Override
+	public void login(String email, String password) {
+		if(!usuarioRepository.isRegistered(email, password)) {
+			throw new MessageErrorException("Usuario o contraseña incorrectos");
+		}
+	}
+	
 }

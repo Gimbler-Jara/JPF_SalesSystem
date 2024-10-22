@@ -3,6 +3,8 @@ package com.minimarket.JPF_SalesSystem.controller;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -86,4 +88,18 @@ public class UsuarioController {
 		}
 		return "redirect:/usuarios";
 	}
+	@PostMapping("/login/{email}/{password}")
+	public ResponseEntity<String> login(@PathVariable String email, @PathVariable String password) {
+	    try {
+	        usuarioService.login(email, password);
+	        return ResponseEntity.ok("Login exitoso");
+	    } catch (IllegalArgumentException e) {
+	        // Capturar una excepción en caso de email o password incorrectos
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email o password incorrectos");
+	    } catch (Exception e) {
+	        // Capturar cualquier otro tipo de excepción inesperada
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error en el servidor");
+	    }
+	}
+	
 }

@@ -14,25 +14,35 @@
 }
 
 .formulario {
-	padding-top: 5%;
+	padding-top: 2%;
 	padding-left: 1%;
 	padding-right: 1%;
-	width: 30%;
+	width: 40%;
 	height: 100%;
 }
 
 .lista {
 	border-left: 1px solid #4f4f4f;
-	width: 70%;
+	width: 60%;
 	height: 100%;
 	padding-left: 2%;
 	padding-right: 3%;
 }
 
-th {
-	background-color: black;
-	color: white;
+.formulario-venta {
+	width: 80%;
+	margin: 20px auto;
 }
+
+.producto{
+	display: flex;
+	justify-content: space-between;
+}
+
+.lista-venta {
+	width: 100%;
+}
+
 
 .btns {
 	padding: 6px;
@@ -52,8 +62,13 @@ th {
 .icondelete {
 	color: #ff5e5e;
 	background-color: white;
+	font-size: 20px;
 }
 
 .icondelete:hover {
 	color: red;
+}
+
+.iconoinfo {
+	font-size: 20px;
 }

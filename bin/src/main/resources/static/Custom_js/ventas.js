@@ -17,3 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	// Valida si hay productos seleccionados en la tabla al cargar la página
 	validateForm();
 });
+
+
+
