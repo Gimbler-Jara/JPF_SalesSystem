@@ -41,6 +41,7 @@ public class VentaController {
 
 	@GetMapping
 	public String mostrarFormularioCrear(Model model, @ModelAttribute("errorMessage") String errorMessage) {
+		
 		List<ProductoVentaLocal> productosVentaLocal = ventaProductoService.generarListaProductosVenta(listaVentaProductos);
 		List<Usuario> clientes = usuarioService.listarClientes();
 
@@ -57,6 +58,7 @@ public class VentaController {
 
 	@PostMapping("/agregarProducto")
 	public String agregarProducto(@ModelAttribute VentaProducto ventaProducto, RedirectAttributes redirectAttributes) {
+		
 		try {
 			ventaProductoService.agregarProductoAVenta(ventaProducto, listaVentaProductos);
 			return "redirect:/ventas";
@@ -77,13 +79,14 @@ public class VentaController {
 	}
 
 	@PostMapping("/eliminarProducto")
-	public String eliminarProducto(@RequestParam("nombreProducto") String nombreProducto) {
+	public String eliminarProducto(@RequestParam("nombreProducto") String nombreProducto ) {
 		ventaProductoService.eliminarProductoDeVenta(nombreProducto, listaVentaProductos);
 		return "redirect:/ventas";
 	}
 
 	@GetMapping("/detallesVenta")
 	public String verDetallesVenta(Model model, @RequestParam("idVenta") Integer idVenta) {
+		
 		model.addAttribute("ventaProductos", ventaProductoService.obtenerProductosDeVenta(idVenta));
 		model.addAttribute("mostrarModal", true);
 

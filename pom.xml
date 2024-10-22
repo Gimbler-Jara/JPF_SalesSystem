@@ -67,7 +67,13 @@
       <dependency>
 		<groupId>org.projectlombok</groupId>
 		<artifactId>lombok</artifactId>
-	</dependency>       
+	</dependency>  
+	<!--Libreria extraer Hash-->     
+	<dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
 	</dependencies>
 
 	<build>

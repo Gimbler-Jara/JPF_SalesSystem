@@ -3,8 +3,6 @@ package com.minimarket.JPF_SalesSystem.controller;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +42,7 @@ public class UsuarioController {
 	public String guardarUsuario(Usuario usuario, Model model, RedirectAttributes redirectAttributes) {
 		try {
 			Usuario usuarioExistentePorCorreo = usuarioService.buscarPorCorreo(usuario.getEmail());
+			
 			if (usuarioExistentePorCorreo != null && !usuarioExistentePorCorreo.getId_usuario().equals(usuario.getId_usuario())) {
 				model.addAttribute("errorMessage", "Correo ya registrado!!");
 				model.addAttribute("user", usuario);
@@ -52,9 +51,15 @@ public class UsuarioController {
 				return "usuarios/lista";
 			}
 
-			usuario.setFechaCreacion(LocalDateTime.now());
-			usuarioService.guardarUsuario(usuario);
-			redirectAttributes.addFlashAttribute("successMessage", "Usuario guardado con éxito!");
+			if (usuario.getId_usuario() != null) {
+	            usuarioService.modificarUsuario(usuario);
+	            redirectAttributes.addFlashAttribute("successMessage", "Usuario modificado con éxito!");
+	        } else {
+	            usuario.setFechaCreacion(LocalDateTime.now());
+	            usuarioService.guardarUsuario(usuario);
+	            redirectAttributes.addFlashAttribute("successMessage", "Usuario guardado con éxito!");
+	        }
+			
 			return "redirect:/usuarios";
 		} catch (Exception e) {
 			model.addAttribute("usuario", usuario);
@@ -88,18 +93,6 @@ public class UsuarioController {
 		}
 		return "redirect:/usuarios";
 	}
-	@PostMapping("/login/{email}/{password}")
-	public ResponseEntity<String> login(@PathVariable String email, @PathVariable String password) {
-	    try {
-	        usuarioService.login(email, password);
-	        return ResponseEntity.ok("Login exitoso");
-	    } catch (IllegalArgumentException e) {
-	        // Capturar una excepción en caso de email o password incorrectos
-	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email o password incorrectos");
-	    } catch (Exception e) {
-	        // Capturar cualquier otro tipo de excepción inesperada
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error en el servidor");
-	    }
-	}
+	
 	
 }

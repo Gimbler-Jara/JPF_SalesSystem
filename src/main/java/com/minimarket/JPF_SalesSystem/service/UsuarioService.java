@@ -9,6 +9,8 @@ public interface UsuarioService {
 	public List<Usuario> listarUsuarios();
 
 	public void guardarUsuario(Usuario usuario);
+	
+	public void modificarUsuario(Usuario usuario);
 
 	public Usuario buscarUsuarioPorId(Long id);
 
@@ -18,5 +20,5 @@ public interface UsuarioService {
 	
 	public List<Usuario> listarClientes();
 	
-	public void login(String email, String password);
+	boolean validarUsuario(Usuario usuarioLogin);
 }

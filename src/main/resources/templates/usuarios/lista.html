@@ -26,6 +26,10 @@
 				<li><a th:href="@{/usuarios}"><i class="fa-solid fa-users me-2"></i>Usuarios</a></li>
 				<li><a th:href="@{/ventas}"><i class="fa-solid fa-cart-shopping me-2"></i>Ventas</a></li>
 			</ul>
+			
+			<div class="Logout">
+			   <a class="btn ml-2" th:href="@{/logout}" role="button">Cerrar Sesión</a>
+			</div>
 		</div>
 
 		<div class="body">
@@ -50,7 +54,7 @@
 						    <input type="email" th:field="*{email}" class="form-control" />
 						</div>
 
-						<div class="mb-3">
+						<div class="mb-3" th:if="${usuario.getId_usuario() == null}">
 							<label class="form-label">Password:</label>
 						    <input type="text" th:field="*{password}" class="form-control" />
 						</div>
@@ -72,6 +76,7 @@
 							<button type="submit" class="btns">Guardar</button>
 						</div>
 					</form>
+					
 				</div>
 
 				<div class="lista">

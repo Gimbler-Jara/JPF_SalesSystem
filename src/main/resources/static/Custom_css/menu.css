@@ -8,7 +8,7 @@
 
 .contenedor-general {
 	width: 100vw;
-	height:100Vh;
+	height: 100Vh;
 	display: flex;
 }
 
@@ -16,19 +16,20 @@
 	background-color: black;
 	width: 14vw;
 	box-shadow: 10px 0 20px rgba(0, 0, 0, 0.5);
+	position: relative;
 }
 
 .body {
 	width: 86vw;
 }
 
-.menu .logo{
+.menu .logo {
 	display: flex;
 	justify-content: center;
 	padding-top: 20%;
 }
 
-.menu .logo img{
+.menu .logo img {
 	width: 55%;
 	border-radius: 50%;
 }
@@ -43,16 +44,33 @@
 	padding: 20px 0;
 }
 
-.menu ul li a{
+.menu ul li a {
 	text-decoration: none;
 	color: white;
-	font-weight:bold;
+	font-weight: bold;
 	font-size: 20px;
 	transition: transform 0.3s ease;
 	display: inline-block;
 }
 
-.menu ul li a:hover{
-	transform:scale(1.1);
+.menu ul li a:hover {
+	transform: scale(1.1);
 	transform-origin: top;
+}
+
+.Logout {
+	position: absolute;
+	bottom: 30px;
+	left: 30px;
+	width: 100%;
+}
+
+.Logout a {
+	border: 1px solid white;
+	color: white;
+}
+
+.Logout a:hover {
+	background-color: white;
+	color: black;
 }
