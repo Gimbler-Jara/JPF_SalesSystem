@@ -137,7 +137,7 @@ public class VentaController {
 		datosPdf.put("fechaVenta", ventaEncontrada.getFecha().format(formatter));
 		datosPdf.put("totalVenta", ventaEncontrada.getTotalVenta());
 		datosPdf.put("cliente", ventaEncontrada.getCliente());
-		datosPdf.put("vendedor", usuarioEncontrado.getUsername());
+		datosPdf.put("vendedor", ventaEncontrada.getUsuario().getUsername());
 		
 		ByteArrayInputStream pdfBytes = pdfService.generarPdf("template_pdf", datosPdf);
     	
