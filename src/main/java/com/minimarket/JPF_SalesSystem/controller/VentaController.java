@@ -2,6 +2,7 @@ package com.minimarket.JPF_SalesSystem.controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -132,6 +133,8 @@ public class VentaController {
 		System.err.println(ventaEncontrada.getId_venta());
 		Map<String, Object> datosPdf = new HashMap<String, Object>();
 		datosPdf.put("factura", ventaProductoService.obtenerProductosDeVenta(_idVenta));
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		datosPdf.put("fechaVenta", ventaEncontrada.getFecha().format(formatter));
 		datosPdf.put("totalVenta", ventaEncontrada.getTotalVenta());
 		datosPdf.put("cliente", ventaEncontrada.getCliente());
 		datosPdf.put("vendedor", usuarioEncontrado.getUsername());
