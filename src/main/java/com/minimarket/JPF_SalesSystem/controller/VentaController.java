@@ -1,9 +1,17 @@
 package com.minimarket.JPF_SalesSystem.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,27 +28,29 @@ import com.minimarket.JPF_SalesSystem.model.VentaProducto;
 import com.minimarket.JPF_SalesSystem.service.ProductoService;
 import com.minimarket.JPF_SalesSystem.service.UsuarioService;
 import com.minimarket.JPF_SalesSystem.service.VentaService;
+import com.minimarket.JPF_SalesSystem.service.impl.PdfService;
 import com.minimarket.JPF_SalesSystem.service.impl.VentaProductoServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/ventas")
 public class VentaController {
 
-	@Autowired
-	private VentaService ventaService;
+	private final VentaService ventaService;
 
-	@Autowired
-	private ProductoService productoService;
+	private final ProductoService productoService;
 
-	@Autowired
-	private UsuarioService usuarioService;
+	private final UsuarioService usuarioService;
 
-	@Autowired
-	private VentaProductoServiceImpl ventaProductoService;
+	private final VentaProductoServiceImpl ventaProductoService;
+	
+	private final PdfService pdfService;
 
 	List<VentaProducto> listaVentaProductos = new ArrayList<VentaProducto>();
+	Integer _idVenta;
 
 	@GetMapping
 	public String mostrarFormularioCrear(Model model, @ModelAttribute("errorMessage") String errorMessage, HttpSession session) {
@@ -92,10 +102,11 @@ public class VentaController {
 
 	@GetMapping("/detallesVenta")
 	public String verDetallesVenta(Model model, @RequestParam("idVenta") Integer idVenta) {
-		
+		_idVenta= idVenta;
 		model.addAttribute("ventaProductos", ventaProductoService.obtenerProductosDeVenta(idVenta));
 		model.addAttribute("mostrarModal", true);
 
+		model.addAttribute("venta", new Venta());
 		model.addAttribute("productos", productoService.listarProductos());
 		model.addAttribute("usuarios", usuarioService.listarUsuarios());
 		model.addAttribute("ventaProducto", new VentaProducto());
@@ -109,5 +120,31 @@ public class VentaController {
 	public String cerrarModal(Model model) {
 		model.addAttribute("mostrarModal", false);
 		return "redirect:/ventas";
+	}
+	
+	@GetMapping("/generar_pdf")
+	public ResponseEntity<InputStreamResource>generarPDf(HttpSession sesion) throws IOException {
+		Long usuarioId = (Long) sesion.getAttribute("usuarioId");
+		Usuario usuarioEncontrado = usuarioService.buscarUsuarioPorId(usuarioId);
+
+		
+		Venta ventaEncontrada = ventaService.obtenerVentaPorId(_idVenta);
+		System.err.println(ventaEncontrada.getId_venta());
+		Map<String, Object> datosPdf = new HashMap<String, Object>();
+		datosPdf.put("factura", ventaProductoService.obtenerProductosDeVenta(_idVenta));
+		datosPdf.put("totalVenta", ventaEncontrada.getTotalVenta());
+		datosPdf.put("cliente", ventaEncontrada.getCliente());
+		datosPdf.put("vendedor", usuarioEncontrado.getUsername());
+		
+		ByteArrayInputStream pdfBytes = pdfService.generarPdf("template_pdf", datosPdf);
+    	
+    	HttpHeaders headers = new HttpHeaders();
+    	headers.add("Content-Disposition", "inline; filename=productos.pdf");
+    	
+    	return ResponseEntity.ok()
+    			.headers(headers)
+    			.contentType(MediaType.APPLICATION_PDF)
+    			.body(new InputStreamResource(pdfBytes));
+
 	}
 }

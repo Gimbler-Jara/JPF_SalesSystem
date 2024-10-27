@@ -202,6 +202,9 @@
 							</tr>
 						</thead>
 						<tbody>
+						   <div class="text-right mr-4">
+							        <a target="_blank" th:href="@{/ventas/generar_pdf}" class="btn btn-info mt-3">Imprimir Boleta</a>
+							</div>
 							<tr th:each="ventaProducto : ${ventaProductos}">
 								<!--<td th:text="${ventaProducto.id}"></td> -->
 								<td th:text="${ventaProducto.producto.nombre}"></td>
