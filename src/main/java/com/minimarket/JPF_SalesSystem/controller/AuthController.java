@@ -26,9 +26,10 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public String login(@ModelAttribute("usuario") Usuario usuarioFormulario, Model model, HttpSession session) {
+		Usuario _usuario = usuarioService.buscarPorCorreo(usuarioFormulario.getEmail());
 		boolean validarUsuario = usuarioService.validarUsuario(usuarioFormulario);
 
-		if (validarUsuario) {
+		if (validarUsuario && (_usuario.getEstado() == true)) {
 
 			for (Usuario usuario : usuarioService.listarUsuarios()) {
 
