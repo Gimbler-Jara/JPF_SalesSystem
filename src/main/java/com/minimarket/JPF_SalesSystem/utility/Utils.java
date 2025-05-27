@@ -11,5 +11,10 @@ public class Utils {
 	public static boolean checkPassword(String passwordFormulario, String hashPassword) {
 		return BCrypt.checkpw(passwordFormulario, hashPassword);
 	}
+	
+	
+	public static void main(String[] args) {
+		System.out.println(Utils.extraerHash("123456"));
+	}
 
 }

@@ -125,10 +125,7 @@ public class VentaController {
 	
 	@GetMapping("/generar_pdf")
 	public ResponseEntity<InputStreamResource>generarPDf(HttpSession sesion) throws IOException {
-		Long usuarioId = (Long) sesion.getAttribute("usuarioId");
-		Usuario usuarioEncontrado = usuarioService.buscarUsuarioPorId(usuarioId);
-
-		
+	
 		Venta ventaEncontrada = ventaService.obtenerVentaPorId(_idVenta);
 		System.err.println(ventaEncontrada.getId_venta());
 		Map<String, Object> datosPdf = new HashMap<String, Object>();
